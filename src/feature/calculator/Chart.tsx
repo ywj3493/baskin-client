@@ -11,13 +11,12 @@ function AxisTick(props : {
 }) {
     const { points, width, height } = props;
     return <g id="axis">
-        <line x="50"></line>
-        {[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1].map((value, idx)=>(
-            <g>
-                <text x="0" y={height*(1-value)}>{`${value*100}%`}</text>
+        {[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1].map((value, idx)=>{
+            return <>
+                <text key={`axisText${idx}`} x="0" y={height*(1-value)+5}>{`${value*100}%`}</text>
                 <line key={`axisLine${idx}`} stroke="gray" strokeDasharray="5,5" x1={50} y1={height*value} x2={width+100} y2={height*value}/>
-            </g>
-        ))}
+            </>
+        })}
     </g>
 }
 
@@ -93,12 +92,17 @@ function ChartGraph(props : {
 }) {
     const { points } = props;
     const colors = coloringChartMarkers(points);
-    return <g>
+    return <g id="graph">
         <path fill="none" stroke="black" strokeWidth="1.5" d={
             `M ${points[0].x+50} ${points[0].y}` +
             points.map(({x, y}) => `L ${x+50}, ${y}`).join(' ')
         }/>
-        {points.map(({x, y, value}, idx) => <circle key={`${idx}`} cx={x+50} cy={y} r="5" fill={colors[idx]} tabIndex={idx} onFocus={()=>{console.dir(`x, y, value = ${x}, ${y}, ${value}`)}}/>)}
+        {points.map(({x, y, value}, idx) => {
+            return <>
+            <text key={`graphNumberingText${idx}`} x={x+50} y={y+20} >{idx}</text>
+            <circle key={`graphPoint${idx}`} cx={x+50} cy={y} r="5" fill={colors[idx]} tabIndex={0} onFocus={()=>{console.dir(`x, y, value = ${x}, ${y}, ${value}`)}}/>
+            </>
+        })}
     </g>
 }
 
@@ -118,7 +122,7 @@ function ChartBox(props : {
     const points = data.map((p, idx) => ({x: xScale(idx), y: yScale(p), value: p}));
 
     return <Box sx={{p: 3, width: width, height: height}}>
-        <svg viewBox={`-20 -20 ${width+100} ${height+100}`} width={width} height={height}>
+        <svg id="svgChart" viewBox={`-20 -20 ${width+100} ${height+100}`} width={width} height={height}>
             <AxisTick points={points} width={width} height={height} />
             <ChartGraph points={points}/>
         </svg>

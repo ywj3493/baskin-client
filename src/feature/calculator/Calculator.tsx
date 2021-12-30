@@ -1,9 +1,17 @@
-import { Box, Divider, TextField } from "@mui/material";
+import { Box, Divider, TextField, Button } from "@mui/material";
 import { lazy, Suspense, useState } from "react";
 import TabDescription from "component/TabDescription";
 import ChartSuspense from "./ChartSuspense";
 import { handleNumberStateChange } from "feature/common/reactUtil";
 const ChartBox = lazy(() => import("./Chart"));
+
+function downloadChart() {
+    
+}
+
+function copyChartToClipboard() {
+    let chart = document.getElementById("svgChart");
+}
 
 function Calculator() {
     const [numPlayer, setNumPlayer] = useState(3);
@@ -24,6 +32,16 @@ function Calculator() {
         </Box>
         <Divider variant="middle" />
         <Suspense fallback={<ChartSuspense width={width} height={height}/>}>
+            <Button onClick={()=> {
+                let element = document.getElementById("svgChart")?.innerHTML;
+                // navigator.clipboard.write(element)
+                //     .then(()=> {
+                //         console.dir("Text copied!")
+                //     }).catch((error) => {
+                //         console.dir(error);
+                //     });
+                
+            }}> 차트 클립보드 복사 </Button>
             <ChartBox numPlayer={numPlayer} maxCall={maxCall} numEnd={numEnd} width={width} height={height}/>
         </Suspense>
     </div>
