@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { TubeBufferGeometry } from 'three';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Mesh, TextureLoader, TubeBufferGeometry } from 'three';
 
-function CoinMesh(props) {
-    const mesh = useRef(null);
+function CoinMesh(props : {
+    onCoinClick: Function,
+    idx: number,
+    position: [x: number, y: number, z: number],
+    clicked: boolean
+}) {
+    const mesh = useRef<Mesh>(null!);
 
     const [clicked, setClicked] = useState(false);
+
+    // const coinImgMap = useLoader(TextureLoader, 'asset/bitcoin.png');
 
     useFrame(() => (mesh.current.rotation.z = mesh.current.rotation.x += 0.01));
 
@@ -24,12 +31,16 @@ function CoinMesh(props) {
     </mesh>
 }
 
-function BettingPlayScene(props) {
+function BettingPlayScene(props : {
+    numPlayer : number,
+    betAmount : number,
+    maxCall : number
+}) {
     const { numPlayer, betAmount, maxCall } = props;
-    const [coins, setCoins] = useState([]);
-    const [playLog, setPlayLog] = useState({});
+    const [coins, setCoins] = useState<boolean[]>([]);
+    // const [playLog, setPlayLog] = useState({});
     useEffect(()=> {
-        let tempCoins = [];
+        let tempCoins: any = [];
         for(let i = 0; i < numPlayer * betAmount; i++) {
             tempCoins[i] = false;
         }
@@ -53,7 +64,7 @@ function BettingPlayScene(props) {
      * @param {number} idx 
      * @returns {boolean}
      */
-    const onCoinClick = (idx) => {
+    const onCoinClick = (idx : number) => {
         if(coins[idx]) {
             coins[idx] = !coins[idx];
             return true;

@@ -8,6 +8,7 @@ import 'typeface-roboto';
 import './style.css';
 import Footer from './Footer';
 import HotSheet from '../feature/hotSheet/HotSheet';
+import BettingPlay from 'feature/bettingPlay/BettingPlay';
 
 function Title() {
   return <Typography variant='h3' component="h3">
@@ -26,6 +27,7 @@ function MainTab() {
       <Tab label="핫시트 플레이" value="hotsheet"/>
       <Tab label="멀티 플레이" value="multi-play"/>
       <Tab label="승률 계산기" value="calculator"/>
+      <Tab label="베팅 플레이" value="betting-play"/>
     </Tabs>
     <TabPanel value={tabId} index={"calculator"}>
       <Calculator />
@@ -38,6 +40,9 @@ function MainTab() {
     </TabPanel>
     <TabPanel value={tabId} index={"multi-play"}>
       <Multiplay/>
+    </TabPanel>
+    <TabPanel value={tabId} index={"betting-play"}>
+      <BettingPlay/>
     </TabPanel>
   </div>
 }
